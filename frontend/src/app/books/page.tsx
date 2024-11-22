@@ -2,17 +2,29 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import type { IBook } from "~/interfaces";
+import { get, post } from "~/utils/request";
 
 export default function Book() {
 	const [isCreate, setIsCreate] = useState<boolean>(true);
+	const [formData, setFormData] = useState({
+		title: "",
+		author: "",
+		publicationYear: 1900,
+	});
 
-	const { data: books } = useQuery<IBook[]>({
+	const { data: books, refetch } = useQuery<IBook[]>({
 		queryKey: ["books"],
 		queryFn: async () => {
-			const req = await fetch("http://localhost:8000/books");
-			return await req.json();
+			return await get("books");
 		},
 	});
+
+	const handleFormChange = (e) => {
+		setFormData({
+			...formData,
+			[e.target.name]: e.target.value,
+		});
+	};
 
 	let Legend = () => (
 		<legend className="text-xl font-semibold text-gold-500">Create Book</legend>
@@ -22,12 +34,24 @@ export default function Book() {
 			<button
 				type="button"
 				className="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transform transition duration-300"
+				onClick={() => {
+					post("books", formData).then(() => {
+						refetch();
+					});
+				}}
 			>
 				Add Book
 			</button>
 			<button
 				type="button"
 				className="w-full py-3 bg-gray-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transform transition duration-300"
+				onClick={() => {
+					setFormData({
+						title: "",
+						author: "",
+						publicationYear: 1900,
+					});
+				}}
 			>
 				Clear Form
 			</button>
@@ -40,6 +64,11 @@ export default function Book() {
 				className="text-xl font-semibold text-gold-500"
 				onClick={() => {
 					setIsCreate(true);
+					setFormData({
+						title: "",
+						author: "",
+						publicationYear: 1900,
+					});
 				}}
 			>
 				Edit Book
@@ -84,9 +113,11 @@ export default function Book() {
 								</label>
 								<input
 									type="text"
-									id="bookTitle"
+									name="title"
 									className="w-full p-3 border border-gray-600 rounded-lg bg-gray-900 text-white placeholder-gray-500"
 									placeholder="Enter book title"
+									value={formData.title}
+									onChange={handleFormChange}
 								/>
 							</div>
 							<div>
@@ -98,9 +129,11 @@ export default function Book() {
 								</label>
 								<input
 									type="text"
-									id="bookAuthor"
+									name="author"
 									className="w-full p-3 border border-gray-600 rounded-lg bg-gray-900 text-white placeholder-gray-500"
 									placeholder="Enter author name"
+									value={formData.author}
+									onChange={handleFormChange}
 								/>
 							</div>
 							<div>
@@ -112,9 +145,11 @@ export default function Book() {
 								</label>
 								<input
 									type="number"
-									id="bookPublicationYear"
+									name="publicationYear"
 									className="w-full p-3 border border-gray-600 rounded-lg bg-gray-900 text-white placeholder-gray-500"
 									placeholder="Enter publication year"
+									value={formData.publicationYear}
+									onChange={handleFormChange}
 								/>
 							</div>
 						</fieldset>
@@ -146,7 +181,18 @@ export default function Book() {
 							<tbody>
 								{books?.map((book) => {
 									return (
-										<tr className="hover:bg-gray-800 transition duration-300 cursor-pointer">
+										<tr
+											key={book.id}
+											className="hover:bg-gray-800 transition duration-300 cursor-pointer"
+											onClick={() => {
+												setIsCreate(false);
+												setFormData({
+													title: book.title,
+													author: book.author,
+													publicationYear: book.publicationYear,
+												});
+											}}
+										>
 											<td className="border border-gray-700 p-3 text-center">
 												{book.id}
 											</td>
