@@ -4,14 +4,32 @@ import type { ICreateMember } from "../models/Member";
 
 import { Router } from "express";
 import MemberController from "../controllers/members";
+import { IPage } from "../interfaces";
 
 const router = Router();
 const _c = new MemberController();
 
-router.get("/", (req: Request, res: Response) => {
-	const members = _c.getAll();
-	res.status(200).json(members);
-});
+router.get(
+	"/",
+	(
+		req: Request<{}, IPage<IMember>, {}, { page?: string; items?: string }>,
+		res: Response,
+	) => {
+		const { page, items } = req.query;
+
+		let response: IPage<IMember>;
+
+		if (page === undefined && items === undefined) {
+			response = _c.getAll();
+		} else {
+			const _page = page ? parseInt(page) : 0;
+			const _items = items ? parseInt(items) : 5;
+
+			response = _c.getPage(_page, _items);
+		}
+		res.status(200).json(response);
+	},
+);
 
 router.get("/:id", (req: Request<{ id: string }>, res: Response) => {
 	const { id } = req.params;

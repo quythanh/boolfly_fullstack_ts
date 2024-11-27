@@ -4,18 +4,37 @@ import type { ICreateBook } from "../models/Book";
 
 import { Router } from "express";
 import BookController from "../controllers/books";
+import { IPage } from "../interfaces";
 
 const router = Router();
 const _c = new BookController();
 
-router.get("/", (req: Request, res: Response) => {
-	const books = _c.getAll();
-	res.status(200).json(books);
-});
+router.get(
+	"/",
+	(
+		req: Request<{}, IPage<IBook>, {}, { page?: string; items?: string }>,
+		res: Response,
+	) => {
+		const { page, items } = req.query;
+
+		let response: IPage<IBook>;
+
+		if (page === undefined && items === undefined) {
+			response = _c.getAll();
+		} else {
+			const _page = page ? parseInt(page) : 0;
+			const _items = items ? parseInt(items) : 5;
+
+			response = _c.getPage(_page, _items);
+		}
+		res.status(200).json(response);
+	},
+);
 
 router.get("/:id", (req: Request<{ id: string }>, res: Response) => {
 	const { id } = req.params;
-	const book = _c.get(parseInt(id));
+	const _id = parseInt(id);
+	const book = _c.get(_id);
 
 	if (!book) {
 		res.status(404).json({ message: "Item not found" });
@@ -60,7 +79,9 @@ router.put(
 
 router.delete("/:id", (req: Request<{ id: string }>, res: Response) => {
 	const { id } = req.params;
-	const result = _c.delete(parseInt(id));
+	const _id = parseInt(id);
+	const result = _c.delete(_id);
+
 	if (!result) {
 		res.status(404).json({ message: "Item not found" });
 		return;

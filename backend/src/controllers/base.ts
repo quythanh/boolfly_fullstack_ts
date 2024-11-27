@@ -1,4 +1,5 @@
 import IBase from "../models/base";
+import { IPage } from "../interfaces";
 
 export default abstract class Controller<T extends IBase> {
 	protected _l: T[];
@@ -17,8 +18,20 @@ export default abstract class Controller<T extends IBase> {
 		return this._l.find((i) => i.id === id);
 	}
 
-	getAll(): T[] {
-		return this._l;
+	getAll(): IPage<T> {
+		return {
+			current: 0,
+			total: 1,
+			data: this._l,
+		};
+	}
+
+	getPage(page: number, items: number): IPage<T> {
+		return {
+			current: page,
+			total: Math.ceil(this._l.length / items),
+			data: this._l.slice(page * items, (page + 1) * items),
+		};
 	}
 
 	create(m: T): void {
