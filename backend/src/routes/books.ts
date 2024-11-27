@@ -35,9 +35,28 @@ router.post("/", (req: Request<{}, {}, ICreateBook>, res: Response) => {
 	res.status(201).json(newBook);
 });
 
-router.put("/:id", (req: Request, res: Response) => {
-	res.status(200).json({ hello: "world" });
-});
+router.put(
+	"/:id",
+	(req: Request<{ id: string }, {}, ICreateBook>, res: Response) => {
+		const { id } = req.params;
+		const _id = parseInt(id);
+
+		const book = _c.get(_id);
+
+		if (book === undefined) {
+			res.status(404).json({ message: "Item not found" });
+			return;
+		}
+
+		const updatedBook: IBook = {
+			...book,
+			...req.body,
+		};
+
+		const result = _c.update(_id, updatedBook);
+		res.status(200).json(result);
+	},
+);
 
 router.delete("/:id", (req: Request<{ id: string }>, res: Response) => {
 	const { id } = req.params;

@@ -26,13 +26,14 @@ export default abstract class Controller<T extends IBase> {
 		this._counter++;
 	}
 
-	update(id: number, m: T): void {
-		if (id !== m.id) return;
+	update(id: number, m: T): boolean | T {
+		if (id !== m.id) return false;
 
 		const idx = this._l.findIndex((i) => i.id === id);
-		if (idx === -1) return;
+		if (idx === -1) return false;
 
 		this._l[idx] = m;
+		return m;
 	}
 
 	delete(id: number): boolean | T {

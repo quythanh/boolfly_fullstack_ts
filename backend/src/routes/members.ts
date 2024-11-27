@@ -34,9 +34,28 @@ router.post("/", (req: Request<{}, {}, ICreateMember>, res: Response) => {
 	res.status(201).json(newMember);
 });
 
-router.put("/:id", (req: Request, res: Response) => {
-	res.status(200).json({ hello: "world" });
-});
+router.put(
+	"/:id",
+	(req: Request<{ id: string }, {}, ICreateMember>, res: Response) => {
+		const { id } = req.params;
+		const _id = parseInt(id);
+
+		const member = _c.get(_id);
+
+		if (member === undefined) {
+			res.status(404).json({ message: "Item not found" });
+			return;
+		}
+
+		const updatedMember: IMember = {
+			...member,
+			...req.body,
+		};
+
+		const result = _c.update(_id, updatedMember);
+		res.status(200).json(result);
+	},
+);
 
 router.delete("/:id", (req: Request<{ id: string }>, res: Response) => {
 	const { id } = req.params;
