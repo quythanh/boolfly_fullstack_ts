@@ -5,3 +5,14 @@ export interface IBook {
 	publicationYear: number;
 	available: boolean;
 }
+
+export interface IMember {
+	id: number;
+	name: string;
+}
+
+export interface IPage<T> {
+	current: number;
+	total: number;
+	data: T[];
+}
