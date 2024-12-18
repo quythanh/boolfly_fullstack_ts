@@ -1,5 +1,4 @@
-import IBase from "../models/base";
-import { IPage } from "../interfaces";
+import type { IBase, IPage } from "@shared/types";
 
 export default abstract class Controller<T extends IBase> {
 	protected _l: T[];

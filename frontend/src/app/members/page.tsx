@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { IMember, IPage } from "~/interfaces";
+import type { IMember, IPage } from "@shared/types";
 import { del, get, post, put } from "~/utils/request";
 import Table from "~/components/Table";
 import Pagination from "~/components/Pagination";
@@ -34,8 +34,8 @@ export default function Member() {
 		},
 	});
 
-	const handleFormChange = (e: React.SyntheticEvent) => {
-		const { name, value } = e.target as HTMLInputElement;
+	const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
 		setFormData({
 			...formData,
 			[name]: value,

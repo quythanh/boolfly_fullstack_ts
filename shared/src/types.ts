@@ -1,13 +1,15 @@
-export interface IBook {
-	id: number;
+export interface IBase {
+	readonly id: number;
+}
+
+export interface IBook extends IBase {
 	title: string;
 	author: string;
 	publicationYear: number;
 	available: boolean;
 }
 
-export interface IMember {
-	id: number;
+export interface IMember extends IBase {
 	name: string;
 }
 

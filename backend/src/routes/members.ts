@@ -1,10 +1,9 @@
 import type { Request, Response } from "express";
-import type IMember from "../models/Member";
+import type { IMember, IPage } from "@shared/types";
 import type { ICreateMember } from "../models/Member";
 
 import { Router } from "express";
 import MemberController from "../controllers/members";
-import { IPage } from "../interfaces";
 
 const router = Router();
 const _c = new MemberController();

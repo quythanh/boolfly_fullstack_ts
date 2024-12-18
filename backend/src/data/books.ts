@@ -1,4 +1,4 @@
-import IBook from "../models/Book";
+import type { IBook } from "@shared/types";
 
 const BOOKS: IBook[] = [
 	{

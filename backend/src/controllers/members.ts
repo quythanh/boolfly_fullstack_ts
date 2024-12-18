@@ -1,4 +1,4 @@
-import type IMember from "../models/Member";
+import type { IMember } from "@shared/types";
 import Controller from "./base";
 import MEMBERS from "../data/members";
 

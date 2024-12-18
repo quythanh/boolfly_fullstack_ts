@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { IBook, IPage } from "~/interfaces";
+import type { IBook, IPage } from "@shared/types";
 import { del, get, post, put } from "~/utils/request";
 import Table from "~/components/Table";
 import Pagination from "~/components/Pagination";

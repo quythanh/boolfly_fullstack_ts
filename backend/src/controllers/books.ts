@@ -1,4 +1,4 @@
-import type IBook from "../models/Book";
+import type { IBook } from "@shared/types";
 import Controller from "./base";
 import BOOKS from "../data/books";
 

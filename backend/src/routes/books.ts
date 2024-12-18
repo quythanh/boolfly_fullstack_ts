@@ -1,10 +1,9 @@
 import type { Request, Response } from "express";
-import type IBook from "../models/Book";
+import type { IPage, IBook } from "@shared/types";
 import type { ICreateBook } from "../models/Book";
 
 import { Router } from "express";
 import BookController from "../controllers/books";
-import { IPage } from "../interfaces";
 
 const router = Router();
 const _c = new BookController();

@@ -1,4 +1,4 @@
-import IMember from "../models/Member";
+import type { IMember } from "@shared/types";
 
 const MEMBERS: IMember[] = [
 	{ id: 1, name: "Phan Chí Hiếu" },
