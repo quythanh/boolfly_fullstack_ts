@@ -1,0 +1,31 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./shared:/shared
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    env_file: "./frontend/.env"
+    depends_on:
+      - backend
+    working_dir: /app
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile-dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./shared:/shared
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    working_dir: /app

@@ -1,0 +1,16 @@
+FROM node:23.4.0-alpine
+
+RUN corepack enable
+RUN corepack prepare pnpm@9.15.0 --activate
+
+EXPOSE 3000
+
+WORKDIR /app
+
+COPY package.json ./
+COPY pnpm-lock.yaml ./
+RUN pnpm install
+
+COPY . .
+
+CMD ["pnpm", "run", "dev"]
